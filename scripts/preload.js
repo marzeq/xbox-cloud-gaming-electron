@@ -14,22 +14,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
 	(function mockChromeUserAgent() {
 		let oiginalVoices = window.speechSynthesis.getVoices()
-		window.speechSynthesis.getVoices = function () {
-			return [
-				{
-					voiceURI: "Google US English",
-					name: "Google US English",
-					lang: "en-US",
-					localService: false,
-					default: false,
-				},
-			]
-		}
-
+		window.speechSynthesis.getVoices = () => [
+			{
+				voiceURI: "Google US English",
+				name: "Google US English",
+				lang: "en-US",
+				localService: false,
+				default: false,
+			}
+		]
 		// wait some arbitraty time before cleaning up the mess we did previously
 		setTimeout(() => {
-			window.speechSynthesis.getVoices = function () {
-				return oiginalVoices
-			}
+			window.speechSynthesis.getVoices = () => oiginalVoices
 		}, 10_000)
 	})()
