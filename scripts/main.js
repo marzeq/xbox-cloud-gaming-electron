@@ -66,11 +66,6 @@ app.on("browser-window-created", (_, window) => {
 	window.setMenu(null)
 	window.webContents.setUserAgent(userAgent)
 
-	window.webContents.insertCSS(css`
-	::-webkit-scrollbar {
-		display: none;
-	}`)
-
 	window.on("leave-full-screen", () => {
 		if (isFullScreen) {
 			const win = BrowserWindow.getAllWindows()[0]
