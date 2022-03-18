@@ -1,11 +1,11 @@
 {
   "name": "xbox-cloud-gaming-electron",
   "productName": "Xbox Cloud Gaming",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A Linux desktop web app for Xbox Cloud Gaming",
   "main": "scripts/main.js",
   "scripts": {
-    "start": "electron --enable-accelerated-mjpeg-decode --enable-accelerated-video --ignore-gpu-blacklist --enable-native-gpu-memory-buffers --enable-gpu-rasterization .",
+    "start": "electron .",
     "build": "electron-builder --publish never"
   },
   "build": {

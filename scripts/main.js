@@ -1,13 +1,18 @@
-const { app, globalShortcut, BrowserWindow } = require("electron")
+const { app, globalShortcut, BrowserWindow, shell } = require("electron")
 const path = require("path")
 const { javascript } = require("template-tags")
 const userAgent = "Mozilla/5.0 (X11 Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"
 
 let isFullScreen = false
 
-// this causes flickering on some amd gpu's/apu's
+// this appears to be causing flickering on some systems
 // will stay disabled for now until a fix is found
 // app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
+app.commandLine.appendSwitch("enable-accelerated-mjpeg-decode")
+app.commandLine.appendSwitch("enable-accelerated-video")
+app.commandLine.appendSwitch("ignore-gpu-blacklist")
+app.commandLine.appendSwitch("enable-native-gpu-memory-buffers")
+app.commandLine.appendSwitch("enable-gpu-rasterization")
 
 const createWindow = () => {
 	const mainWindow = new BrowserWindow({
@@ -42,6 +47,8 @@ app.whenReady().then(() => {
 			isFullScreen = true
 		}
 	})
+
+	globalShortcut.register("F1", () => shell.openExternal("https://github.com/marzeq/xbox-cloud-gaming-electron"))
 
 	globalShortcut.register("F12", () => {
 		const win = BrowserWindow.getAllWindows()[0]
