@@ -4,7 +4,7 @@
 
 ## Manual Installation
 
--   Go to the [latest release](https://github.com/marzeq/xbox-cloud-gaming/releases/latest).
+-   Go to the [latest release](https://github.com/marzeq/xbox-cloud-gaming-electron/releases/latest).
 -   Download the specific file that best fits your disto.
 
 # Usage
@@ -24,14 +24,14 @@ You will need to install [npm](https://www.npmjs.com/), the Node.js package mana
 Once you have npm, clone the wrapper to a convenient location:
 
 ```
-git clone https://github.com/marzeq/xbox-cloud-gaming.git
+git clone https://github.com/marzeq/xbox-cloud-gaming-electron.git
 ```
 
 ## Building
 
 ```
+cd xbox-cloud-gaming-electron
 npm install --global yarn
-cd xbox-cloud-gaming
 yarn
 yarn start
 ```
