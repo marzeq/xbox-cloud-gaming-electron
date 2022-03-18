@@ -2,9 +2,11 @@ const { app, globalShortcut, BrowserWindow } = require("electron")
 const path = require("path")
 const userAgent = "Mozilla/5.0 (X11 Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"
 
-var isFullScreen = false
+let isFullScreen = false
 
-app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
+// this causes flickering on some amd gpu's/apu's
+// will stay disabled for now until a fix is found
+// app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
 
 function createWindow() {
 	const mainWindow = new BrowserWindow({
@@ -61,7 +63,6 @@ app.on("browser-window-created", function (e, window) {
 	window.on("page-title-updated", function (e, title) {
 		// cancel event
 		e.preventDefault()
-		console.log("page-title-updated", title)
 		if (title.includes("|   Xbox Cloud Gaming")) {
 			window.setFullScreen(true)
 			isFullScreen = true
