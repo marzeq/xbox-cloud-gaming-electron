@@ -26,7 +26,7 @@ window.addEventListener("DOMContentLoaded", () => {
     ];
   };
 
-  //wait some arbitraty time before cleaning up the mess we did previously
+  // wait some arbitraty time before cleaning up the mess we did previously
   setTimeout(() => {
     window.speechSynthesis.getVoices = function () {
       return oiginalVoices;

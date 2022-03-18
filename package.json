@@ -1,9 +1,8 @@
 {
-  "name": "geforcenow-electron",
-  "appId": "com.github.hmlendea.${name}",
-  "productName": "GeForce NOW",
-  "version": "1.1.12",
-  "description": "A Linux desktop web app for GeForce NOW",
+  "name": "xbox-cloud-gaming-electron",
+  "productName": "Xbox Cloud Gaming",
+  "version": "1.0.0",
+  "description": "A Linux desktop web app for Xbox Cloud Gaming",
   "main": "scripts/main.js",
   "scripts": {
     "start": "electron --enable-accelerated-mjpeg-decode --enable-accelerated-video --ignore-gpu-blacklist --enable-native-gpu-memory-buffers --enable-gpu-rasterization .",
@@ -13,33 +12,25 @@
     "linux": {
       "target": [
         "zip",
-        "AppImage",
         "deb",
-        "apk",
-        "snap"
+        "AppImage"
       ],
-      "category": "Games",
+      "desktop": {
+        "name": "Xbox Cloud Gaming",
+        "comment": "Stream games using the Xbox Cloud Gaming service"
+      },
+      "category": "Game",
       "artifactName": "${name}_${version}_linux.${ext}"
-    },
-    "snap": {
-      "plugs": [
-        "default",
-        "audio-record",
-        "joystick"
-      ]
-    },
-    "extraFiles": [
-      "com.github.hmlendea.${name}.desktop"
-    ]
+    }
   },
-  "repository": "https://github.com/hmlendea/geforcenow-electron",
+  "repository": "https://github.com/marzeq/xbox-cloud-gaming-electron",
   "keywords": [
     "Electron",
-    "gfn",
-    "geforcenow",
-    "geforce-now"
+    "xbox",
+    "xbox-cloud-gaming",
+    "xboxcloudgaming"
   ],
-  "author": "Horațiu Mlendea <Horatiu.Mlendea@ProtonMail.com>",
+  "author": "marzeq <marzeqmarzeq@gmail.com>",
   "license": "GPL-3.0",
   "devDependencies": {
     "electron": "^15.3.0",

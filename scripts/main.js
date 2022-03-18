@@ -13,13 +13,12 @@ function createWindow() {
       contextIsolation: false,
       nativeWindowOpen: false
     },
+    title: "Xbox Cloud Gaming"
   });
 
-  mainWindow.loadURL("https://play.geforcenow.com");
+  mainWindow.loadURL("https://www.xbox.com/en-US/play");
 
   /*
-  uncomment this to debug any errors with loading GFN landing page
-
   mainWindow.webContents.on("will-navigate", (event, url) => {
     console.log("will-navigate", url);
     event.preventDefault();
@@ -36,7 +35,7 @@ app.whenReady().then(() => {
     }
   });
 
-  globalShortcut.register("Super+F", () => {
+  globalShortcut.register("F11", () => {
     isFullScreen = BrowserWindow.getAllWindows()[0].isFullScreen();
     if (isFullScreen) {
       BrowserWindow.getAllWindows()[0].setFullScreen(false);
@@ -60,7 +59,10 @@ app.on("browser-window-created", function (e, window) {
   });
 
   window.on("page-title-updated", function (e, title) {
-    if (title.includes("on GeForce NOW")) {
+    // cancel event
+    e.preventDefault();
+    console.log("page-title-updated", title);
+    if (title.includes("|   Xbox Cloud Gaming")) {
       window.setFullScreen(true);
       isFullScreen = true;
     } else {
