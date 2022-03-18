@@ -1,6 +1,6 @@
 const { app, globalShortcut, BrowserWindow, shell } = require("electron")
 const path = require("path")
-const { javascript } = require("template-tags")
+const { css } = require("template-tags")
 const userAgent = "Mozilla/5.0 (X11 Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"
 
 let isFullScreen = false
@@ -65,6 +65,11 @@ app.on("browser-window-created", (_, window) => {
 	window.setBackgroundColor("#1A1D1F")
 	window.setMenu(null)
 	window.webContents.setUserAgent(userAgent)
+
+	window.webContents.insertCSS(css`
+	::-webkit-scrollbar {
+		display: none;
+	}`)
 
 	window.on("leave-full-screen", () => {
 		if (isFullScreen) {
