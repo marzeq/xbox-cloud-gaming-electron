@@ -3,10 +3,10 @@
   "productName": "Xbox Cloud Gaming",
   "version": "1.0.5",
   "description": "A Linux desktop web app for Xbox Cloud Gaming",
-  "main": "scripts/main.js",
+  "main": "compiled/main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "electron-builder --publish never"
+    "start": "tsc && electron .",
+    "build": "tsc && electron-builder --publish never"
   },
   "build": {
     "linux": {
@@ -33,6 +33,7 @@
   "author": "marzeq <marzeqmarzeq@gmail.com>",
   "license": "GPL-3.0",
   "devDependencies": {
+    "@types/node": "^17.0.31",
     "electron": "^15.3.0",
     "electron-builder": "^22.13.1"
   },

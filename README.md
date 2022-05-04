@@ -47,5 +47,5 @@ cd xbox-cloud-gaming
 git checkout master
 git pull
 yarn
-npm start
+yarn start
 ```
