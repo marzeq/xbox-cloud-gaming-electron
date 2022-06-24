@@ -1,7 +1,7 @@
 {
   "name": "xbox-cloud-gaming-electron",
   "productName": "Xbox Cloud Gaming",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A Linux desktop web app for Xbox Cloud Gaming",
   "main": "compiled/main.js",
   "scripts": {
@@ -13,14 +13,16 @@
       "target": [
         "zip",
         "deb",
-        "AppImage"
+        "AppImage",
+        "rpm",
+        "pacman"
       ],
       "desktop": {
-        "name": "Xbox Cloud Gaming",
-        "comment": "Stream games using the Xbox Cloud Gaming service"
+        "Name": "Xbox Cloud Gaming",
+        "Comment": "Stream games using the Xbox Cloud Gaming service"
       },
       "category": "Game",
-      "artifactName": "${name}_${version}_linux.${ext}"
+      "artifactName": "${name}_${version}.${ext}"
     }
   },
   "repository": "https://github.com/marzeq/xbox-cloud-gaming-electron",

@@ -6,9 +6,7 @@ const userAgent =
 
 let isFullScreen = false
 
-// this appears to be causing flickering on some systems
-// will stay disabled for now until a fix is found
-// app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
+app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
 app.commandLine.appendSwitch("enable-accelerated-mjpeg-decode")
 app.commandLine.appendSwitch("enable-accelerated-video")
 app.commandLine.appendSwitch("ignore-gpu-blacklist")
@@ -25,7 +23,13 @@ const createWindow = () => {
         title: "Xbox Cloud Gaming",
     })
 
-    mainWindow.loadURL("https://www.xbox.com/en-US/play")
+    console.log(process.argv)
+
+    if (process.argv[2] === "--gpu-info") {
+        mainWindow.loadURL("chrome://gpu")
+    } else {
+        mainWindow.loadURL("https://www.xbox.com/en-US/play")
+    }
 }
 
 app.whenReady().then(() => {
