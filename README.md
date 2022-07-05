@@ -2,10 +2,17 @@
 
 **This is a fork of the** [**geforcenow-electron app**](https://github.com/hmlendea/geforcenow-electron) written in Electron, that wraps around the Xbox Cloud Gaming web browser implementation.
 
+## Installation
+
+[![Get it from the AUR](https://raw.githubusercontent.com/hmlendea/readme-assets/master/badges/stores/aur.png)](https://aur.archlinux.org/packages/geforcenow-electron/)
+
+Currently the project is available on these repositories: **AUR**
+
 ## Manual Installation
 
 -   Go to the [latest release](https://github.com/marzeq/xbox-cloud-gaming-electron/releases/latest).
 -   Download the specific file that best fits your disto.
+-   Install it
 
 # Usage
 
@@ -17,7 +24,7 @@ To toggle full-screen mode, use the `F11` keyboard shortcut.
 
 ## Requirements
 
-You will need to install [npm](https://www.npmjs.com/), the Node.js package manager. On most distributions, the package is simply called `npm`. You will also need the `yarn` program.
+You will need to install [npm](https://www.npmjs.com/), the Node.js package manager. On most distributions, the package is simply called `npm`.
 
 ## Cloning the source code
 
@@ -31,12 +38,12 @@ git clone https://github.com/marzeq/xbox-cloud-gaming-electron.git
 
 ```
 cd xbox-cloud-gaming-electron
-npm install --global yarn
-yarn
-yarn start
+npm install yarn
+npx yarn
+npx yarn build
 ```
 
-On subsequent runs, `yarn start` will be all that's required.
+On subsequent runs, `npx yarn build` will be all that's required.
 
 ## Updating
 
@@ -46,6 +53,6 @@ Simply pull the latest version of master and install any changed dependencies:
 cd xbox-cloud-gaming
 git checkout master
 git pull
-yarn
-yarn start
+npx yarn
+npx yarn build
 ```
