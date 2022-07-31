@@ -4,7 +4,7 @@
 
 ## Installation
 
-[![Get it from the AUR](https://raw.githubusercontent.com/hmlendea/readme-assets/master/badges/stores/aur.png)](https://aur.archlinux.org/packages/geforcenow-electron/)
+[![Get it from the AUR](https://raw.githubusercontent.com/hmlendea/readme-assets/master/badges/stores/aur.png)](https://aur.archlinux.org/packages/xbox-cloud-gaming/)
 
 Currently the project is available on these repositories: **AUR**
 
