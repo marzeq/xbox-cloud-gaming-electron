@@ -1,5 +1,6 @@
 import { app, globalShortcut, BrowserWindow, shell } from "electron"
 import path from "path"
+import { javascript, css } from "template-tags"
 
 const userAgentWindows =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36 Edg/103.0.1254.0",
@@ -22,6 +23,8 @@ const createWindow = () => {
             contextIsolation: false,
             nativeWindowOpen: false,
         },
+        height: 800,
+        width: 1200,
         title: "Xbox Cloud Gaming",
     })
 
@@ -72,6 +75,15 @@ app.whenReady().then(() => {
         const win = BrowserWindow.getAllWindows()[0]
         win.webContents.toggleDevTools()
     })
+
+    globalShortcut.register("Control+Shift+i", () => {
+        const win = BrowserWindow.getAllWindows()[0]
+        win.webContents.toggleDevTools()
+    })
+
+    globalShortcut.register("Control+q", () => {
+        app.quit()
+    })
 })
 
 app.on("browser-window-created", (_, window) => {
@@ -79,10 +91,35 @@ app.on("browser-window-created", (_, window) => {
     window.setMenu(null)
     window.webContents.setUserAgent(userAgent)
 
-    if (!process.argv.includes("--gpu-info"))
-        window.webContents.insertCSS(
-            "::-webkit-scrollbar { display: none; }"
-        )
+    const injectCode = () => {
+        if (!process.argv.includes("--gpu-info"))
+            window.webContents.insertCSS(css`
+                ::-webkit-scrollbar { display: none; }
+            `)
+        
+        if (!process.argv.includes("--dont-hide-pointer"))
+            window.webContents.executeJavaScript(javascript`
+                document.addEventListener("mousemove", () => {
+                    document.querySelectorAll("*").forEach((element) => {
+                        element.style.cursor = "default"
+                    })
+                })
+
+                setInterval(() => {
+                    for (const gamepad of navigator.getGamepads()) {
+                        if (!gamepad) continue
+
+                        if (gamepad.buttons.filter((button) => button.pressed).length > 0) {
+                            document.querySelectorAll("*").forEach((element) => {
+                                element.style.cursor = "none"
+                            })
+                        }
+                    }
+                }, 100)
+            `)
+    }
+
+    injectCode()
 
     window.on("leave-full-screen", () => {
         if (isFullScreen) {
@@ -92,10 +129,7 @@ app.on("browser-window-created", (_, window) => {
     })
 
     window.on("page-title-updated", (e, title) => {
-        if (!process.argv.includes("--gpu-info"))
-            window.webContents.insertCSS(
-                "::-webkit-scrollbar { display: none; }"
-            )
+        injectCode()
 
         // cancel event
         e.preventDefault()
