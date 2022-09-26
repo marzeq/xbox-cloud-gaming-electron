@@ -23,8 +23,8 @@ const createWindow = () => {
             contextIsolation: false,
             nativeWindowOpen: false,
         },
-        height: 800,
-        width: 1200,
+        minWidth: 1280,
+        minHeight: 720,
         title: "Xbox Cloud Gaming",
     })
 
