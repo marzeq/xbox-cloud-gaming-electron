@@ -6,7 +6,8 @@
   "main": "compiled/main.js",
   "scripts": {
     "start": "tsc && electron .",
-    "build": "tsc && electron-builder --publish never"
+    "build": "tsc && electron-builder --publish never",
+    "release": "sh scripts/release.sh"
   },
   "build": {
     "linux": {
