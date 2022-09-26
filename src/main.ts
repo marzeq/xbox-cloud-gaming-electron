@@ -1,10 +1,12 @@
 import { app, globalShortcut, BrowserWindow, shell } from "electron"
 import path from "path"
 
-const userAgent =
-    "Mozilla/5.0 (X11 Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"
+const userAgentWindows =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36 Edg/103.0.1254.0",
+    userAgentLinux = "Mozilla/5.0 (X11 Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"
 
-let isFullScreen = false
+let isFullScreen = false,
+    userAgent = userAgentWindows
 
 app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
 app.commandLine.appendSwitch("enable-accelerated-mjpeg-decode")
@@ -25,10 +27,14 @@ const createWindow = () => {
 
     console.log(process.argv)
 
-    if (process.argv[2] === "--gpu-info") {
+    if (process.argv.includes("--gpu-info")) {
         mainWindow.loadURL("chrome://gpu")
     } else {
         mainWindow.loadURL("https://www.xbox.com/en-US/play")
+    }
+
+    if (process.argv.includes("--linux-user-agent")) {
+        userAgent = userAgentLinux
     }
 }
 
@@ -74,6 +80,10 @@ app.on("browser-window-created", (_, window) => {
     window.setBackgroundColor("#1A1D1F")
     window.setMenu(null)
     window.webContents.setUserAgent(userAgent)
+
+    window.webContents.insertCSS(
+        "::-webkit-scrollbar { display: none; } body { overflow: hidden; }"
+    )
 
     window.on("leave-full-screen", () => {
         if (isFullScreen) {
