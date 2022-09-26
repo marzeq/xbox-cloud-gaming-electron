@@ -25,8 +25,6 @@ const createWindow = () => {
         title: "Xbox Cloud Gaming",
     })
 
-    console.log(process.argv)
-
     if (process.argv.includes("--gpu-info")) {
         mainWindow.loadURL("chrome://gpu")
     } else {
@@ -81,9 +79,10 @@ app.on("browser-window-created", (_, window) => {
     window.setMenu(null)
     window.webContents.setUserAgent(userAgent)
 
-    window.webContents.insertCSS(
-        "::-webkit-scrollbar { display: none; } body { overflow: hidden; }"
-    )
+    if (!process.argv.includes("--gpu-info"))
+        window.webContents.insertCSS(
+            "::-webkit-scrollbar { display: none; }"
+        )
 
     window.on("leave-full-screen", () => {
         if (isFullScreen) {
@@ -93,6 +92,11 @@ app.on("browser-window-created", (_, window) => {
     })
 
     window.on("page-title-updated", (e, title) => {
+        if (!process.argv.includes("--gpu-info"))
+            window.webContents.insertCSS(
+                "::-webkit-scrollbar { display: none; }"
+            )
+
         // cancel event
         e.preventDefault()
         if (title.includes("|   Xbox Cloud Gaming")) {
