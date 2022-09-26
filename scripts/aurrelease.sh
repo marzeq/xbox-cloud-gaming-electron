@@ -25,3 +25,9 @@ git push
 cd ../..
 
 rm -rf arch/xbox-cloud-gaming
+
+git add arch/PKGBUILD
+
+git commit -m "PKGBUILD updated to v$VERSION"
+
+git push
