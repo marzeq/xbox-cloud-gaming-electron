@@ -67,18 +67,15 @@ app.whenReady().then(() => {
     )
 
     globalShortcut.register("F12", () => {
-        const win = BrowserWindow.getAllWindows()[0]
-        win.webContents.openDevTools()
+        BrowserWindow.getAllWindows()[0].webContents.openDevTools()
     })
 
     globalShortcut.register("Control+Shift+c", () => {
-        const win = BrowserWindow.getAllWindows()[0]
-        win.webContents.toggleDevTools()
+        BrowserWindow.getAllWindows()[0].webContents.toggleDevTools()
     })
 
     globalShortcut.register("Control+Shift+i", () => {
-        const win = BrowserWindow.getAllWindows()[0]
-        win.webContents.toggleDevTools()
+        BrowserWindow.getAllWindows()[0].webContents.toggleDevTools()
     })
 
     globalShortcut.register("Control+q", () => {
@@ -111,8 +108,6 @@ app.on("browser-window-created", (_, window) => {
 
                         const pressed = [...gamepad.buttons.map(b => b.value), ...gamepad.axes].filter(v => v >= 0.8 || v <= -0.8)
 
-                        console.log(pressed)
-
                         if (pressed.length > 0) {
                             document.querySelectorAll("*").forEach((element) => {
                                 element.style.cursor = "none"
@@ -127,15 +122,13 @@ app.on("browser-window-created", (_, window) => {
 
     window.on("leave-full-screen", () => {
         if (isFullScreen) {
-            const win = BrowserWindow.getAllWindows()[0]
-            win.setFullScreen(true)
+            BrowserWindow.getAllWindows()[0].setFullScreen(true)
         }
     })
 
     window.on("page-title-updated", (e, title) => {
         injectCode()
 
-        // cancel event
         e.preventDefault()
         if (title.includes("|   Xbox Cloud Gaming")) {
             window.setFullScreen(true)
