@@ -109,7 +109,11 @@ app.on("browser-window-created", (_, window) => {
                     for (const gamepad of navigator.getGamepads()) {
                         if (!gamepad) continue
 
-                        if (gamepad.buttons.filter((button) => button.pressed).length > 0) {
+                        const pressed = [...gamepad.buttons.map(b => b.value), ...gamepad.axes].filter(v => v >= 0.8 || v <= -0.8)
+
+                        console.log(pressed)
+
+                        if (pressed.length > 0) {
                             document.querySelectorAll("*").forEach((element) => {
                                 element.style.cursor = "none"
                             })
