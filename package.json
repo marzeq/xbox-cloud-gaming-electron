@@ -1,7 +1,7 @@
 {
   "name": "xbox-cloud-gaming-electron",
   "productName": "Xbox Cloud Gaming",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A Linux desktop web app for Xbox Cloud Gaming",
   "main": "compiled/main.js",
   "scripts": {
