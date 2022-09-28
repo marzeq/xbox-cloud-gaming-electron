@@ -6,8 +6,6 @@ import { rpcLogin } from "./rpc"
 const userAgentWindows = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36 Edg/103.0.1254.0",
     userAgentLinux = "Mozilla/5.0 (X11 Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36"
 
-let isFullScreen = false
-
 const isVaapiAvailable = () => {
     const { execSync } = require("child_process")
 
@@ -57,14 +55,8 @@ app.whenReady().then(() => {
 
     globalShortcut.register("F11", () => {
         const win = BrowserWindow.getAllWindows()[0]
-        isFullScreen = win.isFullScreen()
-        if (isFullScreen) {
-            win.setFullScreen(false)
-            isFullScreen = false
-        } else {
-            win.setFullScreen(true)
-            isFullScreen = true
-        }
+
+        win.setFullScreen(!win.isFullScreen())
     })
 
     globalShortcut.register("F1", () =>
@@ -114,10 +106,14 @@ app.on("browser-window-created", async (_, window) => {
             `)
         
         if (!process.argv.includes("--dont-hide-pointer"))
+            window.webContents.insertCSS(css`
+                .no-pointer { cursor: none; }
+            `)
+
             window.webContents.executeJavaScript(javascript`
                 document.addEventListener("mousemove", () => {
                     document.querySelectorAll("*").forEach((element) => {
-                        element.style.cursor = "default"
+                        element.classList.remove("no-pointer")
                     })
                 })
 
@@ -129,21 +125,15 @@ app.on("browser-window-created", async (_, window) => {
 
                         if (pressed.length > 0) {
                             document.querySelectorAll("*").forEach((element) => {
-                                element.style.cursor = "none"
+                                element.classList.add("no-pointer")
                             })
                         }
                     }   
-                }, 100)
+                }, 10)
             `)
     }
 
     injectCode()
-
-    window.on("leave-full-screen", () => {
-        if (isFullScreen) {
-            BrowserWindow.getAllWindows()[0].setFullScreen(true)
-        }
-    })
 
     rpc?.setActivity({
         details: "Playing",
@@ -162,11 +152,9 @@ app.on("browser-window-created", async (_, window) => {
             
             if (title.includes("  ")) {
                 window.setFullScreen(true)
-                isFullScreen = true
                 state = "Playing " + gameName
             } else {
                 window.setFullScreen(false)
-                isFullScreen = false
                 state = "Viewing " + gameName
             }
 
@@ -180,7 +168,6 @@ app.on("browser-window-created", async (_, window) => {
             })
         } else {
             window.setFullScreen(false)
-            isFullScreen = false
 
             rpc?.setActivity({
                 details: "Playing",
