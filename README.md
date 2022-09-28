@@ -20,6 +20,18 @@ If you've installed it through your package manager, then it should already cont
 
 To toggle full-screen mode, use the `F11` keyboard shortcut.
 
+## FAQ
+
+### Why is my game lagging/my quality is bad?
+
+You might not have VA-API support enabled on your system. To enable it, please refer to your's distro's documentation.
+
+You will also need `libva-utils` installed so the program can verify you have VA-API enabled. It contains the `vainfo` command, which will tell you if you have VA-API support enabled. It might be under a different name depending on your distro.
+
+### Why do I keep getting logged out?
+
+This is an issue on Microsoft's side. If you click on the "Sign in" button, it will log you in again without a need to enter your credentials.
+
 # Building from source
 
 ## Requirements

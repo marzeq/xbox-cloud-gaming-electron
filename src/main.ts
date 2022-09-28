@@ -8,7 +8,19 @@ const userAgentWindows = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 
 let isFullScreen = false
 
-app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
+const isVaapiAvailable = () => {
+    const { execSync } = require("child_process")
+
+    try {
+        execSync("vainfo")
+        return true
+    } catch (e) {
+        console.error("VA-API is not available! Please install it alongside vainfo.")
+        return false
+    }
+}
+
+if (isVaapiAvailable()) app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
 app.commandLine.appendSwitch("enable-accelerated-mjpeg-decode")
 app.commandLine.appendSwitch("enable-accelerated-video")
 app.commandLine.appendSwitch("ignore-gpu-blacklist")
@@ -180,15 +192,15 @@ app.on("browser-window-created", async (_, window) => {
         }
     })
 
-    app.on("will-quit", () => {
+    app.on("will-quit", async () => {
         globalShortcut.unregisterAll()
-        rpc?.clearActivity()
+        await rpc?.clearActivity()
     })
 
-    app.on("window-all-closed", () => {
+    app.on("window-all-closed", async () => {
         if (process.platform !== "darwin") {
+            await rpc?.clearActivity()
             app.quit()
-            rpc?.clearActivity()
         }
     })
 })
