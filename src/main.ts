@@ -182,13 +182,13 @@ app.on("browser-window-created", async (_, window) => {
 
     app.on("will-quit", () => {
         globalShortcut.unregisterAll()
-        rpc?.destroy()
+        rpc?.clearActivity()
     })
 
     app.on("window-all-closed", () => {
         if (process.platform !== "darwin") {
             app.quit()
-            rpc?.destroy()
+            rpc?.clearActivity()
         }
     })
 })
