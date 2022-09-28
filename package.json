@@ -37,11 +37,11 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "@types/node": "^17.0.31",
+    "@types/discord-rpc": "^4.0.3",
     "electron": "^15.3.0",
     "electron-builder": "^22.13.1"
   },
   "dependencies": {
-    "@types/discord-rpc": "^4.0.3",
     "discord-rpc": "^4.0.1"
   }
 }
