@@ -1,12 +1,12 @@
 import { app, globalShortcut, BrowserWindow, shell } from "electron"
 import path from "path"
 import { javascript, css } from "template-tags"
+import { rpcLogin } from "./rpc"
 
 const userAgentWindows = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36 Edg/103.0.1254.0",
     userAgentLinux = "Mozilla/5.0 (X11 Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36"
 
-let isFullScreen = false,
-    userAgent = userAgentWindows
+let isFullScreen = false
 
 app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
 app.commandLine.appendSwitch("enable-accelerated-mjpeg-decode")
@@ -31,10 +31,6 @@ const createWindow = () => {
         mainWindow.loadURL("chrome://gpu")
     } else {
         mainWindow.loadURL(`https://www.xbox.com/${app.getLocale()}/play`)
-    }
-
-    if (process.argv.includes("--linux-user-agent")) {
-        userAgent = userAgentLinux
     }
 }
 
@@ -82,10 +78,22 @@ app.whenReady().then(() => {
     })
 })
 
-app.on("browser-window-created", (_, window) => {
+app.on("browser-window-created", async (_, window) => {
     window.setBackgroundColor("#1A1D1F")
     window.setMenu(null)
-    window.webContents.setUserAgent(userAgent)
+    
+    if (process.argv.includes("--linux-user-agent")) {
+        window.webContents.setUserAgent(userAgentLinux)
+    } else {
+        window.webContents.setUserAgent(userAgentWindows)
+    }
+
+    const rpc = process.argv.includes("--no-rpc") ? null : await rpcLogin().catch(null)
+
+    if (!rpc && !process.argv.includes("--no-rpc")) {
+        console.error("Failed to login to Discord RPC")
+        process.exit(1)
+    }
 
     const injectCode = () => {
         if (!process.argv.includes("--gpu-info"))
@@ -112,7 +120,7 @@ app.on("browser-window-created", (_, window) => {
                                 element.style.cursor = "none"
                             })
                         }
-                    }
+                    }   
                 }, 100)
             `)
     }
@@ -125,24 +133,62 @@ app.on("browser-window-created", (_, window) => {
         }
     })
 
+    rpc?.setActivity({
+        details: "Playing",
+        state: "Browsing the library",
+        startTimestamp: Date.now()
+    })
+
     window.on("page-title-updated", (e, title) => {
         injectCode()
 
         e.preventDefault()
-        if (title.includes("|   Xbox Cloud Gaming")) {
-            window.setFullScreen(true)
-            isFullScreen = true
+        if (title.includes("|")) {
+            const gameName = title.split("|")[0].replaceAll("Play", "").trim()
+
+            let state = gameName
+            
+            if (title.includes("  ")) {
+                window.setFullScreen(true)
+                isFullScreen = true
+                state = "Playing " + gameName
+            } else {
+                window.setFullScreen(false)
+                isFullScreen = false
+                state = "Viewing " + gameName
+            }
+
+
+            rpc?.setActivity({
+                details: "Playing",
+                state,
+                largeImageKey: "xbox",
+                largeImageText: "Xbox Cloud Gaming on Linux (Electron)",
+                startTimestamp: Date.now()
+            })
         } else {
             window.setFullScreen(false)
             isFullScreen = false
+
+            rpc?.setActivity({
+                details: "Playing",
+                state: "Browsing the library",
+                largeImageKey: "xbox",
+                largeImageText: "Xbox Cloud Gaming on Linux (Electron)",
+                startTimestamp: Date.now()
+            })
         }
     })
 
-    app.on("will-quit", () => globalShortcut.unregisterAll())
+    app.on("will-quit", () => {
+        globalShortcut.unregisterAll()
+        rpc?.destroy()
+    })
 
     app.on("window-all-closed", () => {
         if (process.platform !== "darwin") {
             app.quit()
+            rpc?.destroy()
         }
     })
 })
