@@ -24,7 +24,9 @@ To toggle full-screen mode, use the `F11` keyboard shortcut.
 
 ### Why is my game lagging/my quality is bad?
 
-You might not have VA-API support enabled on your system. To enable it, please refer to your's distro's documentation.
+You might not have VA-API support enabled on your system. To check if it's the case, run the app from the terminal and see if you get any errors related to VA-API.
+
+If you do, please refer to your's distro's documentation on how to install and enable it.
 
 You will also need `libva-utils` installed so the program can verify you have VA-API enabled. It contains the `vainfo` command, which will tell you if you have VA-API support enabled. It might be under a different name depending on your distro.
 

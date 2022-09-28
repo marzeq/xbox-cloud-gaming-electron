@@ -12,10 +12,10 @@ const isVaapiAvailable = () => {
     const { execSync } = require("child_process")
 
     try {
-        execSync("vainfo")
-        return true
+        const vainfo = execSync("vainfo").toString() as string
+        return vainfo.includes("VA-API version")
     } catch (e) {
-        console.error("VA-API is not available! Please install it alongside vainfo.")
+        console.error("VA-API is not available! Please install it alongside vainfo. Refer to the README FAQ for more information.")
         return false
     }
 }
