@@ -1,13 +1,14 @@
 {
   "name": "xbox-cloud-gaming-electron",
   "productName": "Xbox Cloud Gaming",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "A Linux desktop web app for Xbox Cloud Gaming",
   "main": "compiled/main.js",
   "scripts": {
     "start": "tsc && electron .",
     "build": "tsc && electron-builder --publish never",
-    "release": "sh scripts/release.sh"
+    "release": "sh scripts/release.sh",
+    "publish": "sh scripts/publish.sh"
   },
   "build": {
     "linux": {
