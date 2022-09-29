@@ -2,6 +2,13 @@
 
 **This is a fork of the** [**geforcenow-electron app**](https://github.com/hmlendea/geforcenow-electron) written in Electron, that wraps around the Xbox Cloud Gaming web browser implementation.
 
+## Why use this over just using the web browser?
+
+-   **Better performance** - This forces the browser to use the GPU for hardware acceleration, which results in better performance. It also uses a Windows user agent by default, which apparently results in better performance as well. You can achieve the same results by using the web browser and enabling hardware acceleration and spoofing the user agent with extensions, but this is a lot easier.
+-   **Better desktop integration** - This app integrates with the desktop environment, allowing you to use the window manager to move and resize the window and launch it from the application launcher (which is crucial for the Steam Deck, as you can then add it as a non-Steam game).
+-   **Better parity with the native Windows app** - This app replicates some of the features of the native Windows app, such as hiding the mouse pointer when the controlled is being used.
+-   **Discord Rich Presence** - This app integrates with Discord, allowing you to show what you're playing on your Discord profile.
+
 ## Installation
 
 [![Get it from the AUR](https://raw.githubusercontent.com/hmlendea/readme-assets/master/badges/stores/aur.png)](https://aur.archlinux.org/packages/xbox-cloud-gaming/)
@@ -22,17 +29,24 @@ To toggle full-screen mode, use the `F11` keyboard shortcut.
 
 ## FAQ
 
-### Why is my game lagging/my quality is bad?
+### I got a "VA-API is not available!" error. What should I do? Is it a bug? Do I need VA-API?
 
-You might not have VA-API support enabled on your system. To check if it's the case, run the app from the terminal and see if you get any errors related to VA-API.
+It's not a bug. You generally need VA-API for a smooth experience. If you don't notice any issues, then you can ignore this error and disable it with the `--no-vaapi-warning` flag.
 
-If you do, please refer to your's distro's documentation on how to install and enable it.
+If you do however notice issues, please refer to your's distro's documentation on how to install and enable VA-API, as the package names and installation methods may vary.
 
-You will also need `libva-utils` installed so the program can verify you have VA-API enabled. It contains the `vainfo` command, which will tell you if you have VA-API support enabled. It might be under a different name depending on your distro.
+You will also need `libva-utils` installed so the program can verify you have VA-API enabled. It contains the `vainfo` command, which will enable the program to cgeck if you have VA-API working. It might be under a different name depending on your distro or merged with the base package. Again, please refer to your distro's documentation.
 
 ### Why do I keep getting logged out?
 
 This is an issue on Microsoft's side. If you click on the "Sign in" button, it will log you in again without a need to enter your credentials.
+
+### What are the flags that I can use?
+
+-   `--no-vaapi-warning` - Disables the VA-API warning.
+-   `--linux-user-agent` - Uses the Linux user agent instead of the Windows one.
+-   `--no-rpc` - Disables Discord Rich Presence.
+-   `--dont-hide-pointer` - Disables hiding the mouse pointer when you're using a controller.
 
 # Building from source
 

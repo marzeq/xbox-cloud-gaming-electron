@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process"
 import { app, globalShortcut, BrowserWindow, shell } from "electron"
 import path from "path"
 import { rpcLogin } from "./rpc"
@@ -5,19 +6,17 @@ import { rpcLogin } from "./rpc"
 const userAgentWindows = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36 Edg/103.0.1254.0",
     userAgentLinux = "Mozilla/5.0 (X11 Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36"
 
-const isVaapiAvailable = () => {
-    const { execSync } = require("child_process")
 
-    try {
-        const vainfo = execSync("vainfo").toString() as string
-        return vainfo.includes("VA-API version")
-    } catch (e) {
-        console.error("VA-API is not available! Please install it alongside vainfo. Refer to the README FAQ for more information.")
-        return false
-    }
+let vaapiAvailable = false
+
+try {
+    const vainfo = execSync("vainfo").toString() as string
+    vaapiAvailable = vainfo.includes("VA-API version")
+} catch (e) {
+    console.error("VA-API is not available! This might cause stuttering and poor quality. Please install it alongside vainfo. Refer to the README FAQ for more information.")
 }
 
-if (isVaapiAvailable()) app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
+if (vaapiAvailable) app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
 app.commandLine.appendSwitch("enable-accelerated-mjpeg-decode")
 app.commandLine.appendSwitch("enable-accelerated-video")
 app.commandLine.appendSwitch("ignore-gpu-blacklist")
@@ -103,6 +102,20 @@ app.on("browser-window-created", async (_, window) => {
             window.webContents.insertCSS(/*css*/`
                 ::-webkit-scrollbar { display: none; }
             `)
+        
+        if (!vaapiAvailable && !process.argv.includes("--no-vaapi-warning"))
+            // inject html to show a warning
+            window.webContents.executeJavaScript(/*javascript*/`
+                const vaapiWarningDiv = document.createElement("div")
+                vaapiWarningDiv.style.backgroundColor = "white"
+                vaapiWarningDiv.style.color = "red"
+                vaapiWarningDiv.style.padding = "10px"
+
+                vaapiWarningDiv.innerHTML = "VA-API is not available! This might cause stuttering and poor quality. Please install it alongside vainfo. Refer to the README FAQ for more information. To disable this warning, pass the --no-vaapi-warning flag."
+
+                document.body.prepend(vaapiWarningDiv)
+            `).catch(() => null)
+
         
         if (!process.argv.includes("--dont-hide-pointer"))
             window.webContents.insertCSS(/*css*/`
