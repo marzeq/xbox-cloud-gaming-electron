@@ -41,12 +41,24 @@ You will also need `libva-utils` installed so the program can verify you have VA
 
 This is an issue on Microsoft's side. If you click on the "Sign in" button, it will log you in again without a need to enter your credentials.
 
+### How do I get controller vibration to work?
+
+Currently, controller vibration is a preview feature. You can turn it on by clicking on your profile picture in the top right corner and enabling "Preview features" in the settings menu. You will need to restart the app for the changes to take effect. After that, enable "Controller vibration" in the "Audio & input" section.
+
+### Will you have a Flatpak version?
+
+A Flatpak version is planned, but it's not a priority at the moment. If you want to help with this, please open an issue. In the meantime, you can use the AppImage version (for example if you're on a Steam Deck).
+
 ### What are the flags that I can use?
 
--   `--no-vaapi-warning` - Disables the VA-API warning.
--   `--linux-user-agent` - Uses the Linux user agent instead of the Windows one.
--   `--no-rpc` - Disables Discord Rich Presence.
--   `--dont-hide-pointer` - Disables hiding the mouse pointer when you're using a controller.
+These are the currently available flags:
+
+|         Name          |                            Description                           |
+| --------------------- | ---------------------------------------------------------------- |
+| `--no-vaapi-warning`  |                    Disables the VA-API warning                   |
+| `--linux-user-agent`  |       Uses the Linux user agent instead of the Windows one       |
+|       `--no-rpc`      |                  Disables Discord Rich Presence                  |
+| `--dont-hide-pointer` | Disables hiding the mouse pointer when you're using a controller |
 
 # Building from source
 
