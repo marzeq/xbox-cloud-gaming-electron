@@ -20,6 +20,8 @@ try {
     console.error(VAAPIWARN)
 }
 
+let rpcDisabled = false
+
 if (vaapiAvailable) {
     app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
     app.commandLine.appendSwitch("enable-accelerated-mjpeg-decode")
@@ -41,8 +43,18 @@ const createWindow = () => {
         title: "Xbox Cloud Gaming",
     })
 
+    if (process.argv.includes("--no-rpc")) rpcDisabled = true
+
     if (process.argv.includes("--gpu-info")) {
         mainWindow.loadURL("chrome://gpu")
+        rpcDisabled = true
+    } else if (process.argv.includes("--open")) {
+        const index = process.argv.indexOf("--open")
+
+        if (process.argv[index + 1] && !process.argv[index + 1].startsWith("-")) {
+            mainWindow.loadURL(process.argv[index + 1])
+            rpcDisabled = true
+        }
     } else {
         mainWindow.loadURL("https://www.xbox.com/play")
     }
@@ -96,9 +108,9 @@ app.on("browser-window-created", async (_, window) => {
         window.webContents.setUserAgent(userAgentWindows)
     }
 
-    const rpc = process.argv.includes("--no-rpc") ? null : await rpcLogin().catch(null)
+    const rpc = rpcDisabled ? null : await rpcLogin().catch(null)
 
-    if (!rpc && !process.argv.includes("--no-rpc")) {
+    if (!rpc && !rpcDisabled) {
         console.error("Failed to login to Discord RPC")
     }
 
