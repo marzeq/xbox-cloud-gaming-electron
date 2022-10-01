@@ -100,7 +100,6 @@ app.on("browser-window-created", async (_, window) => {
 
     if (!rpc && !process.argv.includes("--no-rpc")) {
         console.error("Failed to login to Discord RPC")
-        process.exit(1)
     }
 
     const injectCode = () => {
