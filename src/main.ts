@@ -3,8 +3,7 @@ import { app, globalShortcut, BrowserWindow, shell } from "electron"
 import path from "path"
 import { rpcLogin } from "./rpc"
 
-const userAgentWindows = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36 Edg/103.0.1254.0",
-    userAgentLinux = "Mozilla/5.0 (X11 Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36"
+const userAgentWindows = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53"
 
 const VAAPIWARN = `VA-API is not available! This might cause stuttering and poor quality. Please install it alongside vainfo. Refer to the README FAQ for more information. To disable this warning, pass the --no-vaapi-warning flag.
 
@@ -102,9 +101,7 @@ app.on("browser-window-created", async (_, window) => {
     window.setBackgroundColor("#1A1D1F")
     window.setMenu(null)
     
-    if (process.argv.includes("--linux-user-agent")) {
-        window.webContents.setUserAgent(userAgentLinux)
-    } else {
+    if (!process.argv.includes("--normal-user-agent")) {
         window.webContents.setUserAgent(userAgentWindows)
     }
 
@@ -172,6 +169,10 @@ app.on("browser-window-created", async (_, window) => {
     })
 
     window.on("page-title-updated", (e, title) => {
+        if (!process.argv.includes("--normal-user-agent")) {
+            window.webContents.setUserAgent(userAgentWindows)
+        }
+        
         injectCode()
 
         e.preventDefault()

@@ -56,7 +56,7 @@ These are the currently available flags:
 |         Name          |                            Description                           |
 | --------------------- | ---------------------------------------------------------------- |
 | `--no-vaapi-warning`  |                    Disables the VA-API warning                   |
-| `--linux-user-agent`  |       Uses the Linux user agent instead of the Windows one       |
+| `--normal-user-agent` |      Uses the default user agent instead of the Windows one      |
 |       `--no-rpc`      |                  Disables Discord Rich Presence                  |
 | `--dont-hide-pointer` | Disables hiding the mouse pointer when you're using a controller |
 
