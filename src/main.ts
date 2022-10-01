@@ -6,6 +6,10 @@ import { rpcLogin } from "./rpc"
 const userAgentWindows = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36 Edg/103.0.1254.0",
     userAgentLinux = "Mozilla/5.0 (X11 Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36"
 
+const VAAPIWARN = `VA-API is not available! This might cause stuttering and poor quality. Please install it alongside vainfo. Refer to the README FAQ for more information. To disable this warning, pass the --no-vaapi-warning flag.
+
+If you're on Fedora, there's currently no way to fix this due to a copyright issue. This migth change soon, so please monitor the situation and see if there are any packages in the RPMFusion repository that can be used.`
+
 
 let vaapiAvailable = false
 
@@ -13,15 +17,17 @@ try {
     const vainfo = execSync("vainfo").toString() as string
     vaapiAvailable = vainfo.includes("VA-API version")
 } catch (e) {
-    console.error("VA-API is not available! This might cause stuttering and poor quality. Please install it alongside vainfo. Refer to the README FAQ for more information.")
+    console.error(VAAPIWARN)
 }
 
-if (vaapiAvailable) app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
-app.commandLine.appendSwitch("enable-accelerated-mjpeg-decode")
-app.commandLine.appendSwitch("enable-accelerated-video")
-app.commandLine.appendSwitch("ignore-gpu-blacklist")
-app.commandLine.appendSwitch("enable-native-gpu-memory-buffers")
-app.commandLine.appendSwitch("enable-gpu-rasterization")
+if (vaapiAvailable) {
+    app.commandLine.appendSwitch("enable-features", "VaapiVideoDecoder")
+    app.commandLine.appendSwitch("enable-accelerated-mjpeg-decode")
+    app.commandLine.appendSwitch("enable-accelerated-video")
+    app.commandLine.appendSwitch("ignore-gpu-blacklist")
+    app.commandLine.appendSwitch("enable-native-gpu-memory-buffers")
+    app.commandLine.appendSwitch("enable-gpu-rasterization")
+}
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
@@ -112,7 +118,7 @@ app.on("browser-window-created", async (_, window) => {
                 vaapiWarningDiv.style.padding = "10px"
                 vaapiWarningDiv.style.fontFamily = "sans-serif"
 
-                vaapiWarningDiv.innerHTML = "VA-API is not available! This might cause stuttering and poor quality. Please install it alongside vainfo. Refer to the README FAQ for more information. To disable this warning, pass the --no-vaapi-warning flag."
+                vaapiWarningDiv.innerHTML = VAAPIWARN
 
                 document.body.prepend(vaapiWarningDiv)
             `).catch(() => null)
