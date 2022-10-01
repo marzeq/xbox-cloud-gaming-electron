@@ -110,6 +110,7 @@ app.on("browser-window-created", async (_, window) => {
                 vaapiWarningDiv.style.backgroundColor = "white"
                 vaapiWarningDiv.style.color = "red"
                 vaapiWarningDiv.style.padding = "10px"
+                vaapiWarningDiv.style.fontFamily = "sans-serif"
 
                 vaapiWarningDiv.innerHTML = "VA-API is not available! This might cause stuttering and poor quality. Please install it alongside vainfo. Refer to the README FAQ for more information. To disable this warning, pass the --no-vaapi-warning flag."
 
