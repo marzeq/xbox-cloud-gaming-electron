@@ -38,7 +38,7 @@ const createWindow = () => {
     if (process.argv.includes("--gpu-info")) {
         mainWindow.loadURL("chrome://gpu")
     } else {
-        mainWindow.loadURL(`https://www.xbox.com/${app.getLocale()}/play`)
+        mainWindow.loadURL("https://www.xbox.com/play")
     }
 }
 
