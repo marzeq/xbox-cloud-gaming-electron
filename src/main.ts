@@ -118,7 +118,6 @@ app.on("browser-window-created", async (_, window) => {
             `)
         
         if (!vaapiAvailable && !process.argv.includes("--no-vaapi-warning"))
-            // inject html to show a warning
             window.webContents.executeJavaScript(/*javascript*/`
                 const vaapiWarningDiv = document.createElement("div")
                 vaapiWarningDiv.style.backgroundColor = "white"
@@ -126,13 +125,13 @@ app.on("browser-window-created", async (_, window) => {
                 vaapiWarningDiv.style.padding = "10px"
                 vaapiWarningDiv.style.fontFamily = "sans-serif"
 
-                vaapiWarningDiv.innerHTML = VAAPIWARN
+                vaapiWarningDiv.innerHTML = "${VAAPIWARN.replaceAll("\n", "<br>")}"
 
                 document.body.prepend(vaapiWarningDiv)
             `).catch(() => null)
 
         
-        if (!process.argv.includes("--dont-hide-pointer"))
+        if (!process.argv.includes("--dont-hide-pointer")) {
             window.webContents.insertCSS(/*css*/`
                 .no-pointer { cursor: none; }
             `)
@@ -158,6 +157,7 @@ app.on("browser-window-created", async (_, window) => {
                     }   
                 }, 10)
             `)
+        }
     }
 
     injectCode()
@@ -172,7 +172,7 @@ app.on("browser-window-created", async (_, window) => {
         if (!process.argv.includes("--normal-user-agent")) {
             window.webContents.setUserAgent(userAgentWindows)
         }
-        
+
         injectCode()
 
         e.preventDefault()
