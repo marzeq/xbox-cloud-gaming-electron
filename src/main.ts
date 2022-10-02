@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process"
-import { app, globalShortcut, BrowserWindow, shell } from "electron"
+import { app, globalShortcut, BrowserWindow, shell, session } from "electron"
 import path from "path"
 import { rpcLogin } from "./rpc"
 
@@ -60,6 +60,17 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+    if (!process.argv.includes("--normal-user-agent")) {
+        const filter = {
+            urls: ["https://xbox.com/*"]
+        }
+          
+        session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
+            details.requestHeaders["User-Agent"] = userAgentWindows
+            callback({ requestHeaders: details.requestHeaders })
+        })
+    }
+
     createWindow()
 
     app.on("activate", () => {
